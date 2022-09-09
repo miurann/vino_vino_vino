@@ -10,14 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_08_163143) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_09_112835) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "aromas", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "image"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "grape_varieties", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "regions", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "wine_aromas", force: :cascade do |t|
+    t.bigint "wine_id", null: false
+    t.bigint "aroma_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aroma_id"], name: "index_wine_aromas_on_aroma_id"
+    t.index ["wine_id"], name: "index_wine_aromas_on_wine_id"
+  end
+
+  create_table "wine_grapes", force: :cascade do |t|
+    t.bigint "wine_id", null: false
+    t.bigint "grape_variety_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["grape_variety_id"], name: "index_wine_grapes_on_grape_variety_id"
+    t.index ["wine_id"], name: "index_wine_grapes_on_wine_id"
   end
 
   create_table "wines", force: :cascade do |t|
@@ -38,4 +69,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_08_163143) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "wine_aromas", "aromas"
+  add_foreign_key "wine_aromas", "wines"
+  add_foreign_key "wine_grapes", "grape_varieties"
+  add_foreign_key "wine_grapes", "wines"
 end
