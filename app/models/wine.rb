@@ -6,7 +6,7 @@ class Wine < ApplicationRecord
     t.integer "vintage", null: false
     t.string "label"
     t.string "image"
-    t.integer "type", default: 0, null: false
+    t.integer "category", default: 0, null: false
     t.integer "color", default: 0, null: false
     t.integer "price"
     t.text "description"
@@ -24,7 +24,7 @@ class Wine < ApplicationRecord
 validates :name, presence: true
 validates :producer, presence: true
 validates :vintage, presence: true
-validates :type, presence: true
+validates :category, presence: true
 validates :color, presence: true
 validates :sweetness, presence: true
 validates :body, presence: true
@@ -33,9 +33,9 @@ validates :tannin, presence: true
 
   has_many :wine_aromas
   has_many :wine_grapes
-  has_many :grape_varieties, through: wine_grapes
+  has_many :grape_varieties, through: :wine_grapes
   has_many :aromas, through: :wine_aromas
   belongs_to :region
-  enum type: { still: 0, sparkling: 1 }
+  enum category: { still: 0, sparkling: 1 }
   enum color: { red: 0, white: 1, rose: 2, other: 3 }
 end
