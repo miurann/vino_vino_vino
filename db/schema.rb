@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_09_11_160259) do
+ActiveRecord::Schema[7.0].define(version: 2022_09_12_214117) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,10 +21,28 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_11_160259) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "choices", force: :cascade do |t|
+    t.text "content", null: false
+    t.boolean "correct_answer", null: false
+    t.bigint "question_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_choices_on_question_id"
+  end
+
   create_table "grape_varieties", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "questions", force: :cascade do |t|
+    t.text "content", null: false
+    t.text "description", null: false
+    t.bigint "wine_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["wine_id"], name: "index_questions_on_wine_id"
   end
 
   create_table "regions", force: :cascade do |t|
@@ -71,6 +89,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_09_11_160259) do
     t.index ["region_id"], name: "index_wines_on_region_id"
   end
 
+  add_foreign_key "choices", "questions"
+  add_foreign_key "questions", "wines"
   add_foreign_key "wine_aromas", "aromas"
   add_foreign_key "wine_aromas", "wines"
   add_foreign_key "wine_grapes", "grape_varieties"
